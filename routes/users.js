@@ -39,6 +39,35 @@ router.get("/:email",(req,res)=>{
     res.send(filtered_users)
 });
 
+//GET by specific ID request: retrieve users with a particular lastName
+router.get("/lastname/:lastName", (req, res) => {
+    //extracting the lastName from the reqBody
+    const lastName = req.params.lastName;
+    //filtering users with a particular lastName;
+    filtered_users_lastName = users.filter((user) => user.lastName);
+    //sending filtered_users with a particular lastName
+    res.send(filtered_users_lastName);
+});
+
+//converting string value to a Date value
+function getDateFromString(strDate){
+    let [dd, mm, yyyy] = strDate.split('-');
+    return new Date(yyyy + "/" + mm + "/" + dd);
+}
+
+//GET endpoint for sorting users by DOB
+router.get("/sort", (req, res) => {
+    //sorting the users array by DOB in asc order
+    let sorted_users = users.sort(function(a, b) {
+        let d1 = getDateFromString(a.DOB);
+        let d2 = getDateFromString(b.DOB);
+        return d1 - d2;
+    });
+    //sending msg with users sorted by dob
+    res.send(sorted_users);
+
+})
+
 
 // POST request: Create a new user
 router.post("/",(req,res)=>{
